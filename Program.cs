@@ -14,8 +14,12 @@ namespace dev275x.studentlist
                 Console.WriteLine("Loading data ...");
                 var s = new FileStream("students.txt",FileMode.Open);
                 var r = new StreamReader(s);
-                var D = r.ReadToEnd(); var i = D.Split(',');
-                foreach(var j in i) {Console.WriteLine(j);}
+                var D = r.ReadToEnd(); 
+                var i = D.Split(',');
+                foreach(var j in i) 
+                {
+                    Console.WriteLine(j);
+                }
                 Console.WriteLine("Data loaded");
             }
             else if (args[0]== "r")
@@ -27,8 +31,8 @@ namespace dev275x.studentlist
                 var d = r.ReadToEnd();
                 var i = d.Split(',');
                 var x = new Random();
-                    var y = x.Next(0,i.Length);
-                        Console.WriteLine(i[y]);
+                var y = x.Next(0,i.Length);
+                Console.WriteLine(i[y]);
                 Console.WriteLine("Data loaded");
             }
 
@@ -42,6 +46,7 @@ namespace dev275x.studentlist
                 var g = new StreamReader(s);
                 var d = g.ReadToEnd();
                 s.Seek(0,SeekOrigin.Begin);
+                
                 // Write
                 // But we're in trouble if there are ever duplicates entered
                 r.WriteLine(d.Replace('\n',' ') + "," + t);
@@ -78,12 +83,14 @@ namespace dev275x.studentlist
                 {
                     if (c > ' ' && c < 0177)
                     {
-                        if (!in_word) {
+                        if (!in_word) 
+                        {
                             count = count + 1;
                             in_word = true;
                         }
                     }
-                    else {
+                    else 
+                    {
                         in_word = false;
                     }
                 }
