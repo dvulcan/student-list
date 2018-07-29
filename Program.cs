@@ -8,7 +8,10 @@ namespace dev275x.studentlist
         // The Main method 
         static void Main(string[] args)
         {
-           
+            if (args == null || args.Length!=1) {
+                Console.WriteLine("You must specify a case.");
+                return;//exit early
+            }
             /* Check arguments */
             if (args[0] == "a") {
                 Console.WriteLine("Loading data ...");
