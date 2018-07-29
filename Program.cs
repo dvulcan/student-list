@@ -9,17 +9,16 @@ namespace dev275x.studentlist
         // The Main method 
         static void Main(string[] args)
         {
-            //Debbie added check for arguments
+            //Debbie added check to make sure user added an option
             if (args == null || args.Length!=1) 
             {
                UsageMsg();
-               //Console.WriteLine("Hi");
                return;
             }
 
             var fileContents = LoadData("students.txt");
             /* Check arguments */
-            //debbie 7/29/18 renamed variables for meaning
+            //debbie renamed variables for meaning
             if (args[0] == "a") 
             {
                 Console.WriteLine("Loading data ...");
@@ -103,7 +102,7 @@ namespace dev275x.studentlist
                }
         
         }
-   //debbie added LoadData and UpdateList
+   //debbie added LoadData and UpdateList and Updatemsg
         static string LoadData(string fileName)
         {
             string line;
