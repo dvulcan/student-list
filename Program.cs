@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 
 namespace dev275x.studentlist
 {
@@ -8,20 +9,25 @@ namespace dev275x.studentlist
         // The Main method 
         static void Main(string[] args)
         {
-            if (args == null || args.Length!=1) {
-                Console.WriteLine("You must specify a case.");
-                return;//exit early
+            //Debbie added check for arguments
+            if (args == null || args.Length!=1) 
+            {
+               UsageMsg();
+               //Console.WriteLine("Hi");
+               return;
             }
+
+            var fileContents = LoadData("students.txt");
             /* Check arguments */
-            if (args[0] == "a") {
+            //debbie 7/29/18 renamed variables for meaning
+            if (args[0] == "a") 
+            {
                 Console.WriteLine("Loading data ...");
-                var s = new FileStream("students.txt",FileMode.Open);
-                var r = new StreamReader(s);
-                var D = r.ReadToEnd(); 
-                var i = D.Split(',');
-                foreach(var j in i) 
+                
+                var words = fileContents.Split(',');
+                foreach(var word in words) 
                 {
-                    Console.WriteLine(j);
+                    Console.WriteLine(word);
                 }
                 Console.WriteLine("Data loaded");
             }
@@ -29,13 +35,11 @@ namespace dev275x.studentlist
             {
                 Console.WriteLine("Loading data ...");
                 // We are loading data
-                var s = new FileStream("students.txt",FileMode.Open);
-                var r = new StreamReader(s);
-                var d = r.ReadToEnd();
-                var i = d.Split(',');
+                
+                var words = fileContents.Split(',');
                 var x = new Random();
-                var y = x.Next(0,i.Length);
-                Console.WriteLine(i[y]);
+                var y = x.Next(0,words.Length);
+                Console.WriteLine(words[y]);
                 Console.WriteLine("Data loaded");
             }
 
@@ -43,34 +47,26 @@ namespace dev275x.studentlist
             {
                 // read
                 Console.WriteLine("Loading data ...");
-                var s = new FileStream("students.txt",FileMode.Open);
-                var r = new StreamWriter(s);
-                var t = args[0].Substring(1);
-                var g = new StreamReader(s);
-                var d = g.ReadToEnd();
-                s.Seek(0,SeekOrigin.Begin);
                 
-                // Write
-                // But we're in trouble if there are ever duplicates entered
-                r.WriteLine(d.Replace('\n',' ') + "," + t);
-                var now = DateTime.Now;
-                r.WriteLine(String.Format("List last updated on {0}", now));
-                r.Flush();
+                var newname = args[0].Substring(1);
+                UpdateList(fileContents+","+newname,"students.txt");
+                
                 Console.WriteLine("Data loaded");
             }
             else if (args[0].Contains("?"))
             {
                 Console.WriteLine("Loading data ...");
-                var s = new FileStream("students.txt",FileMode.Open);
-                var r = new StreamReader(s);
-                var D = r.ReadToEnd(); var i = D.Split(',');
+                var words = fileContents.Split(',');
                 bool done = false;
                 var t = args[0].Substring(1);
-                for (int idx = 0; idx < i.Length && !done; idx++)
+                for (int idx = 0; idx < words.Length && !done; idx++)
                 {
-                    if (i[idx] == t)
+                    //Debbie added Trim and corrected brackets
+                    if (words[idx].Trim() == t.Trim())  
+                    {
                         Console.WriteLine("We found it!");
                         done = true;
+                    }
                 }
             }
             else if (args[0].Contains("c"))
@@ -99,8 +95,41 @@ namespace dev275x.studentlist
                 }
 
                 Console.WriteLine(String.Format("{0} words found", count));
+           
             }
-            
+            else   ///Debbie Added usage message and check for unknown selection
+               {
+                UsageMsg();
+               }
+        
         }
+   //debbie added LoadData and UpdateList
+        static string LoadData(string fileName)
+        {
+            string line;
+            using (var fileStream = new FileStream(fileName,FileMode.Open))
+            using (var reader = new StreamReader(fileStream))
+            {
+                line=reader.ReadLine();
+            }
+            return line;
+        }  
+        static void UpdateList(string content,string fileName)
+        {
+            var timestamp = String.Format("List last updated on {0}", DateTime.Now);
+            using (var fileStream = new FileStream(fileName,FileMode.Open))
+            using (var writer = new StreamWriter(fileStream))
+            {
+                writer.WriteLine(content);
+                writer.WriteLine(timestamp);
+            }
+        }
+    static void UsageMsg()
+        {
+          Console.WriteLine("Specify Options: -a (Show All), -?WORD (Find WORD), -c (Show Count), -+WORD (Adds WORD)");
+          return;//exit early
+        }
+    
+        
     }
 }
